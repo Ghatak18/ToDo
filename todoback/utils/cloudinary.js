@@ -9,23 +9,29 @@ cloudinary.config({
   });
 
   const uploadCloudinary = async(localfilepath) =>{
+    let avatarDefault ='https://res.cloudinary.com/ddcpulkwg/image/upload/v1732354621/836_ya4z95.jpg';
 
-    if(!localfilepath) {
-        console.log("no file to upload");
-        return null;
-    }
+    // if(!localfilepath) {
+    //     console.log("no file to upload");
+    //     return null;
+    // }
     
     try {
-        const response = await cloudinary.uploader.upload(localfilepath,{
+        const response = await cloudinary.uploader.upload(localfilepath || avatarDefault, {
             resource_type: "auto"
         })
         console.log(response);
-        fs.unlinkSync(localfilepath);
+        if(localfilepath){
+            fs.unlinkSync(localfilepath);
+        }
         return response;
     
     } catch (error) {
         console.log(error)
-        fs.unlinkSync(localfilepath);
+        if(localfilepath){
+            fs.unlinkSync(localfilepath);
+        }
+        
         return null;
     }
 }

@@ -9,6 +9,17 @@ const taskSchema = new mongoose.Schema({
     user:{
         type: Schema.Types.ObjectId,
         ref: 'User',
+    },
+    priority:{
+        type:Number,
+        required: true,
+        enum: [1,2,3],
+        default: 1
+
+    },
+    isCompleted:{
+        type:Boolean,
+        default: false
     }
 },{
     timestamps:true
