@@ -120,6 +120,29 @@ const logoutUser = async(req,res) =>{
 
     return res.clearCookie("accessToken", options).send({message: "Logged out successfully"})
 }
+
+const refreshAccessToken = async(req, res) =>{
+    const refreshToken = req.body;
+    const isValid = await User.findOne({
+        refreshToken: refreshToken
+    })
+
+    if(!isValid){
+        return res.status(400).send({message: "Invalid refresh token"})
+    }
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    const accessToken = isValid.generateAccessToken()
+
+    return res.cookie("accessToken", accessToken, options)
+                .send({
+                    message: "Access token refreshed successfully",
+                })
+}
+
 module.exports = {test,
     registerUser,
     loginUser,
